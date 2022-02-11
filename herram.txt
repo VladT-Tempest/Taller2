@@ -1,0 +1,8 @@
+17,"Lijadora Electrica",7,130000
+3,"Martillo",76,35000
+56,"Serrucho",21,3
+39,"Podadora",3,230000
+24,"Sierra",18,31000
+68,"Destornillador",106,8000
+83,"Mazo",11,12000
+77,"Llave Inglesa",34,15000
