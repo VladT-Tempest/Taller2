@@ -10,10 +10,10 @@ using namespace std;
 
 /*    variables globales        */
 // arreglo carga inventario de archivo
-int matrizHerram[maxInv][cols];
+string matrizHerram[maxInv][cols];
 // constante con nombre de la base de datos
 string fileInventario = "herram.txt";
-// definde caracter delimitador del archivo de inventario
+// define caracter delimitador del archivo de inventario
 const char delim = ',';
 // arreglo de sub-cadenas
 string subcadenas[cols];
@@ -23,7 +23,7 @@ int menu()
 {
     int x;
     system("cls");
-    cout << "-----Inventario de herramientas--------"<< endl << endl;
+    cout << "-----Inventario de Herramientas--------"<< endl << endl;
     cout << "1. Agregar herramienta"<<endl;
     cout << "2. Listar inventario"<<endl;
     cout << "3. Sumar dato"<<endl;
@@ -35,28 +35,7 @@ int menu()
 
 }
 
-/* Función para dividir strings */
-int * split (string str, char separator)  
-{  
-    int currIndex = 0, i = 0;  
-    int startIndex = 0, endIndex = 0;  
-    int tamStr = str.size();
-    string strings[cols]={};
-    while (i <= tamStr)  
-    {  
-        if ( str[i] == separator || i == tamStr )  
-        {  
-            endIndex = i;  
-            static string subStr = "";  
-            subStr.append(str, startIndex, endIndex - startIndex);  
-            strings[currIndex] = subStr;  
-            currIndex += 1;  
-            startIndex = endIndex + 1;  
-        }  
-        i++;  
-        }  
-        return  strings; 
-}  
+
 
 
 /* Función para cargar inventario en matriz */
@@ -64,12 +43,43 @@ void cargarInventario() {
     std::ifstream file(fileInventario);
     std::string str;
 
+    int currIndex = 0, i = 0;
+    int startIndex = 0, endIndex = 0;
+
     if ( file.is_open() ) {
+        int fila = 0;
+        string strings[cols]={};
         while( file ) {
             std::getline(file, str);
-            //std::cout << str ;
-            std::cout << split(str, delim);
+            int tamStr = str.size();
+        //std::cout << str << " ";
+            while ( i <= tamStr) {
+                if ( str[i] == delim || i == tamStr) {
+                    endIndex = i;
+                    string subStr = "";
+                    subStr.append(str, startIndex, endIndex - startIndex); 
+                    strings[currIndex] = subStr;
+                    currIndex += 1;
+                    startIndex = endIndex +1;
+                }
+                i++;
+            }
+            /*matrizHerram[fila][0] = strings[0];
+            matrizHerram[fila][1] = strings[1];
+            matrizHerram[fila][2] = strings[2];
+            matrizHerram[fila][3] = strings[3];
+            std::cout << matrizHerram[fila][0] << " ";
+            std::cout << matrizHerram[fila][1] << " ";
+            std::cout << matrizHerram[fila][2] << " ";
+            std::cout << matrizHerram[fila][3] << " ";
+            std::cout << fila << endl; */
+            fila++;
+            i=0;
+            currIndex = 0;
+            startIndex = 0;
+            endIndex = 0;
         }
+
     }
     else {
         std::cout << "No pude abrir el archivo de inventario\n";
