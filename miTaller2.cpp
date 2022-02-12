@@ -16,7 +16,6 @@ void cargarInventario();
 void actualizar_archivo();
 void eliminar();
 void precios();
-string Esperar();
 
 
 /*    variables globales        */
@@ -242,9 +241,7 @@ void cargarInventario()
             i=0;
             currIndex = 0;
             startIndex = 0;
-            endIndex = 0;
-
-            
+            endIndex = 0;            
         }
 
     }
@@ -254,7 +251,6 @@ void cargarInventario()
     }
     file.close();
     cout << "Archivo cargado"<<endl;
-    cout << fila;
 }
 
 
@@ -275,7 +271,7 @@ void precios()
             matrizPrecios[cont_precios][0] = matrizHerram[x][0];
             matrizPrecios[cont_precios][1] = matrizHerram[x][1];
             matrizPrecios[cont_precios][2] = to_string(costoTotal);
-cout<<matrizPrecios[cont_precios][0]<<" "<<matrizPrecios[cont_precios][1]<<" "<<matrizPrecios[cont_precios][2]<<endl;
+//cout<<matrizPrecios[cont_precios][0]<<" "<<matrizPrecios[cont_precios][1]<<" "<<matrizPrecios[cont_precios][2]<<endl;
             cont_precios++;
         }
     }
@@ -292,7 +288,7 @@ cout << cont_precios << endl;
                 registroTmp = matrizPrecios[i][0];
                 nombreTmp = matrizPrecios[i][1];
                 costoTotalTmp = matrizPrecios[i][2];
-    cout<<registroTmp<<" "<<nombreTmp<<" "<<costoTotalTmp<<" "<<i<<" "<<j<<endl;
+    //cout<<registroTmp<<" "<<nombreTmp<<" "<<costoTotalTmp<<" "<<i<<" "<<j<<endl;
                 matrizPrecios[i][0] = matrizPrecios[j][0];
                 matrizPrecios[i][1] = matrizPrecios[j][1];
                 matrizPrecios[i][2] = matrizPrecios[j][2];
