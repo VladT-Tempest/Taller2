@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cstring>
+#include <iomanip>
 
 #define maxInv 100
 #define cols 4
@@ -13,12 +14,16 @@ void imprimir();
 void agregar();
 void cargarInventario();
 void actualizar_archivo();
+void eliminar();
+void precios();
 string Esperar();
 
 
 /*    variables globales        */
 // arreglo carga inventario de archivo
 string matrizHerram[maxInv][cols];
+int matrizPrecios[maxInv][3];
+string matrizPrecios2[maxInv][3];
 // constante con nombre de la base de datos
 string fileInventario = "herram.txt";
 // define caracter delimitador del archivo de inventario
@@ -34,57 +39,48 @@ int main ()
     cargarInventario();
     int op;
     /*    Menu principal */
-    int x;
-    cout << "-----Inventario de Herramientas--------"<< endl << endl;
-    cout << "1. Agregar herramienta"<<endl;
-    cout << "2. Listar inventario"<<endl;
-    cout << "3. Sumar dato"<<endl;
-    cout << "4. Eliminar herramienta"<<endl;
-    cout << "5. salir"<<endl;
-
-    cin >> x;
-
 
     while (1 == 1 )
     {
         system("cls");
-        op = x;
+        cout << "-----Inventario de Herramientas--------"<< endl << endl;
+        cout << "1. Agregar herramienta"<<endl;
+        cout << "2. Listar inventario"<<endl;
+        cout << "3. Eliminar herramienta"<<endl;
+        cout << "4. verificar precios"<<endl;
+        cout << "5. salir"<<endl;
+
+        cin >> op;
 
         switch(op)
         {
             case 1:
             {
                 agregar();
-                system("pause");
-                //op= 0;
                 break;
             }
 
             case 2:
             {
                 imprimir();
-                system("pause");
-                op= 0;
                 break;
             }
 
             case 3:
             {
-                
-                Esperar();
-                op= 0;
+                eliminar();
                 break;
             }
             case 4:
             {
-                Esperar();
-                op= 0;
+                precios();
                 break;
 
             }
             case 5:
             {
                 exit(EXIT_SUCCESS);
+
             }
 
             default:
@@ -97,7 +93,28 @@ int main ()
 
 }
 
+void eliminar()
+{
+    string registro;
 
+    cout << "Digite el numero de registro de la herramienta a borrar: ";
+    cin>> registro;
+
+    for (int x = 0; x < fila-1 ; x++)
+    {
+
+        if (matrizHerram[x][0] == registro)
+        {
+            matrizHerram[x][0] = " ";
+            matrizHerram[x][1] = " ";
+            matrizHerram[x][2] = " ";
+            matrizHerram[x][3] = " ";
+        }
+
+    }
+    
+    actualizar_archivo();
+}
 
 //Funcion para agregar registro
 void agregar()
@@ -128,7 +145,6 @@ void agregar()
 
 void actualizar_archivo()
 {
-    int dato;
     string str;
     ofstream temp_file("Archivo Temporal", ios::out);
 
@@ -136,8 +152,13 @@ void actualizar_archivo()
     {
        for (int x = 0; x < fila-1 ; x++)
         {
-            str = matrizHerram[x][0] +","+ matrizHerram[x][1] + "," + matrizHerram[x][2] + "," + matrizHerram[x][3] + "\n";
-            temp_file << str;
+            if (matrizHerram[x][0]!= " ")
+            {
+                str = matrizHerram[x][0] +","+ matrizHerram[x][1] + "," + matrizHerram[x][2] + "," + matrizHerram[x][3] + "\n";
+                temp_file << str;
+                
+            }
+            
         }
 
     }
@@ -154,21 +175,25 @@ void actualizar_archivo()
 //Funcion para imprimir 
 void imprimir()
 {   
-    char enter;
+    const char separator= ' ';
+    const int ancho1 = 30;
+    const int ancho2 = 15;
     system ("cls");
-    cout << "Registro" << "\t\t\t\t" << "Herramienta" << "\t\t\t\t\t" << "Cantidad" << "\t\t\t\t" << "Costo unitario" << endl;
+    cout << left << setw(ancho2) << setfill(separator) << "Registro"; 
+    cout << left << setw(ancho1) << setfill(separator) << "Herramienta";
+    cout << left << setw(ancho2) << setfill(separator) << "Cantidad";
+    cout << left << setw(ancho2) << setfill(separator) << "Costo unitario";
+    cout << endl;
     for (int x = 0; x < fila-1 ; x++)
     {
-       for (int y = 0; y < cols ; y++) 
-       {
-           cout << matrizHerram[x][y] << "\t\t\t\t\t\t\t\t";
-       }
+       cout << left << setw(ancho2) << setfill(separator) << matrizHerram[x][0]; 
+       cout << left << setw(ancho1) << setfill(separator) << matrizHerram[x][1];
+       cout << left << setw(ancho2) << setfill(separator) << matrizHerram[x][2];
+       cout << left << setw(ancho2) << setfill(separator) << matrizHerram[x][3];
        cout << endl;
     }
 
-    cout << "Digite enter para regresar al menu";
-    cin >> enter;
-
+    system("pause");
 }
 
 
@@ -233,12 +258,63 @@ void cargarInventario()
     cout << fila;
 }
 
-string Esperar()
-{
-    string recibir = "";
-    cout<<"Oprima cualquier tecla para continuar, volvera al menu principal"<<endl;
-    cin >> recibir;
-    cout <<endl;
 
-    return recibir;
+void precios()
+{
+    int cantidad= 0;
+    int costUnitario= 0;
+    int cont_precios = 0;
+    for (int x = 0; x < fila-2 ; x++)
+    {
+        cantidad = stoi(matrizHerram[x][2]);
+        costUnitario = stoi(matrizHerram[x][3]);
+        //cout << stoi(matrizHerram[x][3]) * stoi(matrizHerram[x][2])<< endl;
+        // GLITCH????
+        if (cantidad*costUnitario >= 1000000)
+        {
+            matrizPrecios[cont_precios][0] = stoi(matrizHerram[x][0]);
+            matrizPrecios[cont_precios][1] = stoi(matrizHerram[x][3]) * stoi(matrizHerram[x][2]);
+cout << matrizPrecios[cont_precios][0] << " " <<  matrizPrecios[cont_precios][1]<<endl;
+            cont_precios++;
+        }
+    }
+    // Crea matrizPrecios2 con datos para ordenar
+    int limite = 1000000;
+    int val = 0;
+    for(int i = 0; i < fila ; i++) {
+        if (matrizPrecios[i][1] >= limite) {
+            matrizPrecios2[val][0] = to_string(matrizPrecios[i][0]);
+            matrizPrecios2[val][1] = matrizHerram[i][1];
+            matrizPrecios2[val][2] = to_string(matrizPrecios[i][1]);
+cout << matrizPrecios2[val][0] << " " <<  matrizPrecios2[val][1]<< " " <<  matrizPrecios2[val][2]<<" "<<val<<endl;
+            val++;
+        }
+    }
+    // bubble sort
+
+cout << val << endl;
+    int registroTmp = 0;
+    string  nombreTmp = "";
+    int costoTotalTmp = 0;
+    for (int i = 0; i<val; i++) {
+        for (int j = i+1; j<val; j++) {
+            if(matrizPrecios2[j][0] < matrizPrecios2[i][0]) {
+                registroTmp = stoi(matrizPrecios2[i][0]);
+                nombreTmp = matrizPrecios2[i][1];
+                costoTotalTmp = stoi(matrizPrecios2[i][2]);
+    cout<<registroTmp<<" "<<nombreTmp<<" "<<costoTotalTmp<<" "<<i<<" "<<j<<endl;
+                matrizPrecios2[i][0] = matrizPrecios2[j][0];
+                matrizPrecios2[i][1] = matrizPrecios2[j][1];
+                matrizPrecios2[i][2] = matrizPrecios2[j][2];
+                matrizPrecios2[j][0] = registroTmp;
+                matrizPrecios2[j][1] = nombreTmp;
+                matrizPrecios2[j][2] = costoTotalTmp;
+            }
+        } 
+    }
+ /*   for(int i=0; i<val;i++) {
+        cout << matrizPrecios2[i][0] << " " << matrizPrecios2[i][1] << " " << matrizPrecios2[i][2] << endl;
+    }
+    */
+   system("pause");
 }
