@@ -22,8 +22,7 @@ string Esperar();
 /*    variables globales        */
 // arreglo carga inventario de archivo
 string matrizHerram[maxInv][cols];
-int matrizPrecios[maxInv][3];
-string matrizPrecios2[maxInv][3];
+string matrizPrecios[maxInv][3];
 // constante con nombre de la base de datos
 string fileInventario = "herram.txt";
 // define caracter delimitador del archivo de inventario
@@ -85,7 +84,7 @@ int main ()
 
             default:
             {
-                cout << "Opcion no valida"<<endl;
+                cout << "Opcion no cont_preciosida"<<endl;
                 break;
             }
         }
@@ -264,57 +263,48 @@ void precios()
     int cantidad= 0;
     int costUnitario= 0;
     int cont_precios = 0;
+    int costoTotal = 0;
     for (int x = 0; x < fila-2 ; x++)
     {
         cantidad = stoi(matrizHerram[x][2]);
         costUnitario = stoi(matrizHerram[x][3]);
+        costoTotal = cantidad * costUnitario;
         //cout << stoi(matrizHerram[x][3]) * stoi(matrizHerram[x][2])<< endl;
-        // GLITCH????
-        if (cantidad*costUnitario >= 1000000)
+        if (costoTotal >= 1000000)
         {
-            matrizPrecios[cont_precios][0] = stoi(matrizHerram[x][0]);
-            matrizPrecios[cont_precios][1] = stoi(matrizHerram[x][3]) * stoi(matrizHerram[x][2]);
-cout << matrizPrecios[cont_precios][0] << " " <<  matrizPrecios[cont_precios][1]<<endl;
+            matrizPrecios[cont_precios][0] = matrizHerram[x][0];
+            matrizPrecios[cont_precios][1] = matrizHerram[x][1];
+            matrizPrecios[cont_precios][2] = to_string(costoTotal);
+cout<<matrizPrecios[cont_precios][0]<<" "<<matrizPrecios[cont_precios][1]<<" "<<matrizPrecios[cont_precios][2]<<endl;
             cont_precios++;
         }
     }
-    // Crea matrizPrecios2 con datos para ordenar
-    int limite = 1000000;
-    int val = 0;
-    for(int i = 0; i < fila ; i++) {
-        if (matrizPrecios[i][1] >= limite) {
-            matrizPrecios2[val][0] = to_string(matrizPrecios[i][0]);
-            matrizPrecios2[val][1] = matrizHerram[i][1];
-            matrizPrecios2[val][2] = to_string(matrizPrecios[i][1]);
-cout << matrizPrecios2[val][0] << " " <<  matrizPrecios2[val][1]<< " " <<  matrizPrecios2[val][2]<<" "<<val<<endl;
-            val++;
-        }
-    }
+
     // bubble sort
 
-cout << val << endl;
-    int registroTmp = 0;
+cout << cont_precios << endl;
+    string registroTmp = "";
     string  nombreTmp = "";
-    int costoTotalTmp = 0;
-    for (int i = 0; i<val; i++) {
-        for (int j = i+1; j<val; j++) {
-            if(matrizPrecios2[j][0] < matrizPrecios2[i][0]) {
-                registroTmp = stoi(matrizPrecios2[i][0]);
-                nombreTmp = matrizPrecios2[i][1];
-                costoTotalTmp = stoi(matrizPrecios2[i][2]);
+    string costoTotalTmp = "";
+    for (int i = 0; i<cont_precios; i++) {
+        for (int j = i+1; j<cont_precios; j++) {
+            if(stoi(matrizPrecios[j][0]) < stoi(matrizPrecios[i][0])) {
+                registroTmp = matrizPrecios[i][0];
+                nombreTmp = matrizPrecios[i][1];
+                costoTotalTmp = matrizPrecios[i][2];
     cout<<registroTmp<<" "<<nombreTmp<<" "<<costoTotalTmp<<" "<<i<<" "<<j<<endl;
-                matrizPrecios2[i][0] = matrizPrecios2[j][0];
-                matrizPrecios2[i][1] = matrizPrecios2[j][1];
-                matrizPrecios2[i][2] = matrizPrecios2[j][2];
-                matrizPrecios2[j][0] = registroTmp;
-                matrizPrecios2[j][1] = nombreTmp;
-                matrizPrecios2[j][2] = costoTotalTmp;
+                matrizPrecios[i][0] = matrizPrecios[j][0];
+                matrizPrecios[i][1] = matrizPrecios[j][1];
+                matrizPrecios[i][2] = matrizPrecios[j][2];
+                matrizPrecios[j][0] = registroTmp;
+                matrizPrecios[j][1] = nombreTmp;
+                matrizPrecios[j][2] = costoTotalTmp;
             }
         } 
     }
- /*   for(int i=0; i<val;i++) {
-        cout << matrizPrecios2[i][0] << " " << matrizPrecios2[i][1] << " " << matrizPrecios2[i][2] << endl;
+    for(int i=0; i<cont_precios;i++) {
+        cout << matrizPrecios[i][0] << " " << matrizPrecios[i][1] << " " << matrizPrecios[i][2] << endl;
     }
-    */
+    
    system("pause");
 }

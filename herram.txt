@@ -9,7 +9,6 @@
 411,Palin,257,35000
 235,Cepillo,200,4500
 568,Rastrillo,2000,50000
-358,Lija,50,300
 45,Maza,2500,2500
 11,Llave Inglesa,20000,400
 8965,escuadralarga,2500,3000
